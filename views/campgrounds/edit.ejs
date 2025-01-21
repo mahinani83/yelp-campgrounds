@@ -1,0 +1,98 @@
+<% layout('./layouts/boilerplate') %>
+
+<div class="container d-flex justify-content-center align-items-center">
+    <form
+        action="/campground/<%= campground._id %>?_method=PUT"
+        method="post"
+        class="col col-8 needs-validation"
+        novalidate
+    >
+        <h2 class="text-center mt-2 mb-2"><%= campground.title %></h2>
+
+        <div class="form-group mt-3">
+            <label for="title">Title</label>
+            <input
+                class="form-control"
+                type="text"
+                name="campground[title]"
+                id="title"
+                value="<%= campground.title %>"
+                required
+            />
+            <div class="invalid-feedback">Please enter a title.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input
+                class="form-control"
+                type="text"
+                name="campground[price]"
+                id="price"
+                value="<%= campground.price %>"
+                required
+            />
+            <div class="invalid-feedback">Please enter a price.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Image URL</label>
+            <input
+                class="form-control"
+                type="text"
+                name="campground[image]"
+                id="image"
+                value="<%= campground.image %>"
+                required
+            />
+            <div class="invalid-feedback">Please enter an image URL.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input
+                class="form-control"
+                type="text"
+                name="campground[location]"
+                id="location"
+                value="<%= campground.location %>"
+                required
+            />
+            <div class="invalid-feedback">Please enter a location.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input
+                class="form-control"
+                type="text"
+                name="campground[description]"
+                id="description"
+                value="<%= campground.description %>"
+                required
+            />
+            <div class="invalid-feedback">Please enter a description.</div>
+        </div>
+
+        <button class="btn btn-info mb-3" type="submit">Update</button>
+    </form>
+</div>
+
+<script>
+    // Bootstrap validation script
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
