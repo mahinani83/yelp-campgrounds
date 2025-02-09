@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !== "production"){
+    require("dotenv").config();
+}
+
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -13,6 +17,12 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRouter = require("./routers/user.js");
+const multer = require("multer");
+const upload = multer({dest:'uploads/'})
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet')
+const MongoStore = require('connect-mongo');
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
 
 app.use(methodOverride("_method"));
 app.use(express.json());
@@ -22,8 +32,32 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-const sessionConfiguration = {
-  secret: "thisshouldbeabettersecrete",
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  }),
+)
+app.use(mongoSanitize());  
+
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret
+    }
+})
+
+store.on("error", function (e) {
+  console.log("SESSION STORE ERROR", e)
+})
+
+
+const sessionConfiguration ={
+  store,
+  name:'session',
+  secret,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -36,17 +70,77 @@ const sessionConfiguration = {
 app.use(session(sessionConfiguration));
 
 app.use(flash());
+
+const scriptSrcUrls = [
+  "https://stackpath.bootstrapcdn.com/",
+  // "https://api.tiles.mapbox.com/",
+  // "https://api.mapbox.com/",
+  "https://kit.fontawesome.com/",
+  "https://cdnjs.cloudflare.com/",
+  "https://cdn.jsdelivr.net",
+  "https://cdn.maptiler.com/", // add this
+  "https://code.jquery.com"
+];
+const styleSrcUrls = [
+  "https://kit-free.fontawesome.com/",
+  "https://stackpath.bootstrapcdn.com/",
+  // "https://api.mapbox.com/",
+  // "https://api.tiles.mapbox.com/",
+  "https://fonts.googleapis.com/",
+  "https://use.fontawesome.com/",
+  "https://cdn.jsdelivr.net",
+  "https://cdn.maptiler.com/", // add this
+];
+const connectSrcUrls = [
+  // "https://api.mapbox.com/",
+  // "https://a.tiles.mapbox.com/",
+  // "https://b.tiles.mapbox.com/",
+  // "https://events.mapbox.com/",
+  "https://api.maptiler.com/", // add this
+];
+
+
+const imgSrc = [
+  // all your other existing code
+  
+  // add this:
+  "https://api.maptiler.com/",
+]
+
+const fontSrcUrls = [];
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            childSrc: ["blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/dnysz92qi/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                "https://images.unsplash.com",
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
+
+
+
+  
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.get("/fakeuser", async (req, res) => {
-  const user = new User({ email: "shiva@gmail", username: "shivakumar" });
-  const newUser = await User.register(user, "chicken");
-  res.send(newUser);
-});
+
 
 app.use((req, res, next) => {
   res.locals.successMsg = req.flash("success");
@@ -67,11 +161,11 @@ db.once("open", () => {
 });
 
 app.get("/", (req, res) => {
-  res.send("<a href='campground'>click here to view all campgrounds</a>");
+  res.render("home.ejs");
 });
 app.use("/", userRouter);
-app.use("/campground", campgroundRouter);
-app.use("/campground/:id/reviews", reviewRouter);
+app.use("/campgrounds", campgroundRouter);
+app.use("/campgrounds/:id/reviews", reviewRouter);
 // const handlingError = (req, res, next) => {
 
 //         if (2 > 4) {

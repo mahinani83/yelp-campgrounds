@@ -1,59 +1,75 @@
 <% layout('./layouts/boilerplate') %>
-<div class="container d-flex justify-content-center align-items-center">
-  <form action="/campground" method="post" class="col col-8 needs-validation" novalidate>
-    <div class="form-group mt-3">
-      <label for="title">title</label>
-      <input
-        class="form-control"
-        type="text"
-        name="campground[title]"
-        id="title"
-        required
-      />
-      <div class="valid-feedback">
-        look's good
-      </div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-sm-10">
+      <form
+        action="/campgrounds"
+        method="post"
+        class="col col-8 needs-validation mx-auto"
+        novalidate
+        enctype="multipart/form-data"
+
+      >
+        <div class="form-group mt-3">
+          <label for="title">title</label>
+          <input
+            class="form-control w-100"
+            type="text"
+            name="campground[title]"
+            id="title"
+            required
+          />
+          <div class="valid-feedback">look's good</div>
+        </div>
+        <div class="form-group">
+          <label for="price">price</label>
+          <input
+            class="form-control w-100"
+            type="text"
+            name="campground[price]"
+            id="price"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="location">location</label>
+          <input
+            class="form-control w-100"
+            type="text"
+            name="campground[location]"
+            id="location"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="description">description</label>
+          <input
+            class="form-control w-100"
+            type="text"
+            name="campground[description]"
+            id="description"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="image">add image</label>
+          <div class="custom-file mb-3">
+            <input
+              type="file"
+              class="custom-file-input w-100"
+              id="image"
+              name="image"
+              multiple
+            />
+            <label class="custom-file-label" for="image"
+              >Choose image(s....)</label
+            >
+          </div>
+        </div>
+        <button class="btn-success mb-3">submit</button>
+      </form>
     </div>
-    <div class="form-group">
-      <label for="price">price</label>
-      <input
-        class="form-control"
-        type="text"
-        name="campground[price]"
-        id="price"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label for="image">image url</label>
-      <input
-        class="form-control"
-        type="text"
-        name="campground[image]"
-        id="image"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label for="location">location</label>
-      <input
-        class="form-control"
-        type="text"
-        name="campground[location]"
-        id="location"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label for="description">description</label>
-      <input
-        class="form-control"
-        type="text"
-        name="campground[description]"
-        id="description"
-        required
-      />
-    </div>
-    <button class="btn-success mb-3">submit</button>
-  </form>
+  </div>
 </div>
