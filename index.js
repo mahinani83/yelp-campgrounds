@@ -90,6 +90,8 @@ const styleSrcUrls = [
   "https://use.fontawesome.com/",
   "https://cdn.jsdelivr.net",
   "https://cdn.maptiler.com/", // add this
+  "https://cdnjs.cloudflare.com",
+
 ];
 const connectSrcUrls = [
   // "https://api.mapbox.com/",
@@ -107,7 +109,9 @@ const imgSrc = [
   "https://api.maptiler.com/",
 ]
 
-const fontSrcUrls = [];
+const fontSrcUrls = [
+  "https://cdnjs.cloudflare.com", "data:",
+];
 
 app.use(
     helmet.contentSecurityPolicy({
@@ -127,6 +131,7 @@ app.use(
                 "https://images.unsplash.com",
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
+            manifestSrc: ["'self'"], 
         },
     })
 );

@@ -1,30 +1,30 @@
+
+
 <% layout('./layouts/boilerplate') %>
+<div id="map" class="my-2" style="width:100%; height: 20rem;"></div>
 
-<div id='map' class="my-2" style="width: 100%; height: 20rem;"></div>  
-
-<h1 class="mb-5">campgrounds</h1>
+<h1 class="mb-5 heading">campgrounds</h1>
 
 <% for(let camp of campgrounds){ %>
-<div class="row mb-2 mt-2">
-  
-  <div class="col-md-4">
+<div id="campground-idx" class="row mb-2 mt-2  justify-content-center">
+  <div class="col-md-4 col-sm-10 mb-3">
     <% if(camp.images.length){ %>
-      <img class="img-fluid" style="max-height: 250px;" src="<%= camp.images[0].url %>" alt="<%= camp.images[0].filename %>" />
+    <img
+      class="img-fluid"
+      src="<%= camp.images[0].url %>"
+      alt="<%= camp.images[0].filename %>"
+    />
     <% } %>
-   
   </div>
 
-  <div class="col-md-8">
+  <div class="col-md-8 col-sm-10">
     <h3><%= camp.title %></h3>
     <p><%= camp.description %></p>
-    <a href="#"><%= camp.location %></a>
+    <span><i class="fa-solid fa-location-dot"></i><%= camp.location %></span>
     <a href="/campgrounds/<%= camp._id %>" class="btn btn-primary">know more</a>
   </div>
 </div>
-  <% } %>
-
-  
-</div>
+<% } %>
 
 <script>
   const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
