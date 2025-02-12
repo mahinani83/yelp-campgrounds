@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV !== "production"){
+  require("dotenv").config();
+}
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -5,11 +8,14 @@ const app = express();
 const Campground = require("../models/Campground");
 const cities = require("./cities");
 const { places, descriptors } = require("./seedHelpers");
+const dburl = process.env.DB_URL;
+
+
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp", {
+mongoose.connect(dburl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -20,14 +26,16 @@ db.once("open", () => {
   console.log("database connected");
 });
 
+
+
 const seedDB = async () => {
   await Campground.deleteMany({});
   const randPrice = Math.floor((Math.random * 30) + 1);
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 20; i++) {
     const randNumber = Math.floor(Math.random() * 1000);
     const randCity = cities[randNumber];
     const c = new Campground({
-      author:'6789c8befcb2e9b9be804e11',
+      author:'67ac34585792a33a9d080b3c',
       title:randCity.city,
       price : randNumber , 
       images: [

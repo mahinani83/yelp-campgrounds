@@ -49,8 +49,8 @@
             submitted by <%= campground.author.username %>
           </h5>
 
-          <h5 class="card-title"><%= campground.title %></h5>
-          <h5 class="card-text"><%= campground.price %></h5>
+          <h5 class="card-title"><b><%= campground.title %></b></h5>
+          <h5 class="card-text"><i class="fa-solid fa-dollar-sign"></i> <%= campground.price %></h5>
           <p class="card-text"><%= campground.location %></p>
           <p class="card-text"><%= campground.description %></p>
           <% if( currentUser && campground.author.equals(currentUser._id)){%>

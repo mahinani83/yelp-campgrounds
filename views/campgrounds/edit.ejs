@@ -1,11 +1,11 @@
 <% layout('./layouts/boilerplate') %>
 <div class="container">
   <div class="row justify-content-center text-white">
-    <div class="col-md-10 col-sm-10">
+    <div class="col-md-10 col-sm-10 p-sm-0 p-2">
       <form
         action="/campgrounds/<%= campground._id %>?_method=PUT"
         method="post"
-        class="col col-8 needs-validation mx-auto"
+        class="col col-md-8 col-sm-12 needs-validation mx-auto p-0 p-sm-2"
         novalidate
         enctype="multipart/form-data"
       >
